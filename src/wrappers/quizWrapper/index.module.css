@@ -35,6 +35,14 @@
    padding: 0;
 }
 
+.blue-part-final {
+   width: 230px;
+   height: 50px;
+   background-color: blue;
+   list-style-type: none;
+   margin: 50px;
+}
+
 .blue-part-text {
    margin-top: 10px;
    color: white;
@@ -53,4 +61,10 @@
    -moz-appearance: none;
    -ms-appearance: none;
    -o-appearance: none;
+}
+
+.final {
+   font-size: 40px;
+   margin-top: 50px;
+   margin-left: 95px;
 }
