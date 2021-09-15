@@ -3,6 +3,7 @@ import styles from './index.module.css'
 import CodeHighlighter from '../../components/codeHighlighter'
 import questions from '../../utils/questions'
 import Progress from '../../components/progressBar'
+import { motion } from 'framer-motion'
 
 const QuizWrapper = () => {
    const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -57,6 +58,7 @@ const QuizWrapper = () => {
                      setShowScore(false)
                      setCurrentQuestion(0)
                      setScore(0)
+                     setSeconds(100)
                   }}
                >
                   <div className={styles['blue-part-final']}>
