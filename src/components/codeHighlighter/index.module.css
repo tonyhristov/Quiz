@@ -1,3 +1,8 @@
-.code {
+.code-description {
    margin: 20px;
+}
+
+.code-answer {
+   margin-top: -4px;
+   margin-left: 3px;
 }
