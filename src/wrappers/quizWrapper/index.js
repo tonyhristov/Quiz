@@ -1,56 +1,69 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import styles from './index.module.css'
 import Timer from '../../components/timer'
 import CodeHighlighter from '../../components/codeHighlighter'
 import questions from '../../utils/questions'
 
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import { vs } from 'react-syntax-highlighter/dist/esm/styles/hljs'
-
 const QuizWrapper = () => {
-   const [answer, setAnswer] = useState()
+   const [currentQuestion, setCurrentQuestion] = useState(0)
+   const [showScore, setShowScore] = useState(false)
+   const [score, setScore] = useState(0)
 
-   const answers = questions.questionOne.answers
+   const handleAnswerOptionClick = (isCorrect) => {
+      if (isCorrect) {
+         setScore(score + 1)
+      }
 
-   const handleSubmit = (e) => {
-      setAnswer(e.target.value)
+      const nextQuestion = currentQuestion + 1
+      if (nextQuestion < questions.length) {
+         setCurrentQuestion(nextQuestion)
+      } else {
+         setShowScore(true)
+      }
    }
-
-   console.log(answer)
 
    return (
       <div className={styles.wrapper}>
-         <Timer initialSeconds='100' />
-         <h1 className={styles.name}>{questions.questionOne.name}</h1>
-         <CodeHighlighter>{questions.questionOne.description}</CodeHighlighter>
-         <div className={styles['button-wrapper']}>
-            {Object.keys(answers).map(function (key) {
-               return (
-                  // <button
-                  //    className={styles.button}
-                  //    onClick={(e) => {
-                  //       handleSubmit(e)
-                  //    }}
-                  //    value={key}
-                  // >
-                  //    <div className={styles['blue-part']}>
-                  //       <h1 className={styles['blue-part-text']}>{key}</h1>
-                  //    </div>
-                  //    <div className={styles['description-part']}>
-                  //       <SyntaxHighlighter language='javascript' style={vs}>
-                  //          {answers[key]}
-                  //       </SyntaxHighlighter>
-                  //    </div>
-                  // </button>
-                  <label>
-                     <input type='radio' value={key} />
-                     <SyntaxHighlighter language='javascript' style={vs}>
-                        {answers[key]}
-                     </SyntaxHighlighter>
-                  </label>
-               )
-            })}
-         </div>
+         {showScore ? (
+            <div className='score-section'>
+               You scored {score} out of {questions.length}
+            </div>
+         ) : (
+            <>
+               <Timer initialSeconds='100' />
+               <h1 className={styles.name}>
+                  {questions[currentQuestion].name}
+               </h1>
+               <CodeHighlighter type='description'>
+                  {questions[currentQuestion].description}
+               </CodeHighlighter>
+               <div className={styles['button-wrapper']}>
+                  {questions[currentQuestion].answers.map((key) => {
+                     const value = key.value
+                     return (
+                        <button
+                           className={styles.button}
+                           onClick={() => {
+                              handleAnswerOptionClick(key.isCorrect)
+                           }}
+                           value={value}
+                        >
+                           <div className={styles['blue-part']}>
+                              <h1 className={styles['blue-part-text']}>
+                                 {value}
+                              </h1>
+                           </div>
+                           <div className={styles['description-part']}>
+                              <CodeHighlighter type='answer'>
+                                 {key.answerName}
+                              </CodeHighlighter>
+                           </div>
+                        </button>
+                     )
+                  })}
+               </div>
+            </>
+         )}
       </div>
    )
 }
