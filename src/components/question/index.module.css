@@ -1,0 +1,45 @@
+.button-wrapper {
+   display: block;
+}
+
+.name {
+   margin-left: 20px;
+}
+
+.button {
+   margin-top: 10px;
+   margin-left: 15px;
+   display: flex;
+   background: transparent;
+   border: 0px solid transparent;
+   text-shadow: 0px 0px 0px transparent;
+}
+
+.blue-part {
+   width: 50px;
+   height: 50px;
+   background-color: blue;
+   list-style-type: none;
+   margin: 25px 0 0 0;
+   padding: 0;
+}
+
+.blue-part-text {
+   margin-top: 10px;
+   color: white;
+}
+
+.description-part {
+   width: 610px;
+   height: 50px;
+   background-color: white;
+   float: left;
+   margin-top: 25px;
+}
+
+.answer {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   -ms-appearance: none;
+   -o-appearance: none;
+}
