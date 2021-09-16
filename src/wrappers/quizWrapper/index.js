@@ -3,7 +3,7 @@ import styles from './index.module.css'
 import CodeHighlighter from '../../components/codeHighlighter'
 import questions from '../../utils/questions'
 import Progress from '../../components/progressBar'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const QuizWrapper = () => {
    const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -42,69 +42,83 @@ const QuizWrapper = () => {
          }
          setSeconds(100)
       }
+
       return () => {
          clearInterval(myInterval)
       }
    })
 
+   const key = showScore ? 100000 : currentQuestion
+
    return (
-      <div className={styles.wrapper}>
-         {showScore ? (
-            <div className={styles.final}>
-               You scored {score} out of {questions.length}
-               <button
-                  className={styles.button}
-                  onClick={() => {
-                     setShowScore(false)
-                     setCurrentQuestion(0)
-                     setScore(0)
-                     setSeconds(100)
-                  }}
-               >
-                  <div className={styles['blue-part-final']}>
-                     <h1 className={styles['blue-part-text']}>Start Again</h1>
+      <AnimatePresence exitBeforeEnter={true}>
+         <motion.div
+            animate={{ x: 0, y: 0 }}
+            initial={true}
+            key={key}
+            exit={{ x: 0, y: -250 }}
+            className={styles.wrapper}
+            transition={{ duration: 0.5 }}
+         >
+            {showScore ? (
+               <div className={styles.final}>
+                  You scored {score} out of {questions.length}
+                  <button
+                     className={styles.button}
+                     onClick={() => {
+                        setShowScore(false)
+                        setCurrentQuestion(0)
+                        setScore(0)
+                        setSeconds(100)
+                     }}
+                  >
+                     <div className={styles['blue-part-final']}>
+                        <h1 className={styles['blue-part-text']}>
+                           Start Again
+                        </h1>
+                     </div>
+                  </button>
+               </div>
+            ) : (
+               <>
+                  <div>
+                     <Progress done={seconds} />
                   </div>
-               </button>
-            </div>
-         ) : (
-            <>
-               <div>
-                  <Progress done={seconds} />
-               </div>
-               <h1 className={styles.name}>
-                  {questions[currentQuestion].name}
-               </h1>
-               <CodeHighlighter type='description'>
-                  {questions[currentQuestion].description}
-               </CodeHighlighter>
-               <div className={styles['button-wrapper']}>
-                  {questions[currentQuestion].answers.map((key) => {
-                     const value = key.value
-                     return (
-                        <button
-                           className={styles.button}
-                           onClick={() => {
-                              handleAnswerOptionClick(key.isCorrect)
-                           }}
-                           value={value}
-                        >
-                           <div className={styles['blue-part']}>
-                              <h1 className={styles['blue-part-text']}>
-                                 {value}
-                              </h1>
-                           </div>
-                           <div className={styles['description-part']}>
-                              <CodeHighlighter type='answer'>
-                                 {key.answerName}
-                              </CodeHighlighter>
-                           </div>
-                        </button>
-                     )
-                  })}
-               </div>
-            </>
-         )}
-      </div>
+                  <h1 className={styles.name}>
+                     {questions[currentQuestion].name}
+                  </h1>
+                  <CodeHighlighter type='description'>
+                     {questions[currentQuestion].description}
+                  </CodeHighlighter>
+                  <div className={styles['button-wrapper']}>
+                     {questions[currentQuestion].answers.map((key) => {
+                        const value = key.value
+                        return (
+                           <button
+                              className={styles.button}
+                              onClick={() => {
+                                 handleAnswerOptionClick(key.isCorrect)
+                              }}
+                              value={value}
+                           >
+                              <div className={styles['blue-part']}>
+                                 <h1 className={styles['blue-part-text']}>
+                                    {value}
+                                 </h1>
+                              </div>
+                              <div className={styles['description-part']}>
+                                 <CodeHighlighter type='answer'>
+                                    {key.answerName}
+                                 </CodeHighlighter>
+                              </div>
+                           </button>
+                        )
+                     })}
+                  </div>
+               </>
+            )}
+         </motion.div>
+      </AnimatePresence>
    )
 }
 
